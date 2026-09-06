@@ -54,7 +54,7 @@ export const authMiddleware = {
     }
     
     // User solo puede consultar su propio RUT
-    if (normalizeRut(user.rut) === normalizeRut(requestedRut)) {
+    if (user.rut && normalizeRut(user.rut) === normalizeRut(requestedRut)) {
       next()
       return
     }

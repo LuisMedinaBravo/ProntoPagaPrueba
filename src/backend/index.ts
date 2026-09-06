@@ -32,6 +32,8 @@ app.get('/health', (_req, res) => {
 // Rutas de la API
 app.use('/api/auth', authRoutes)
 app.use('/api/score', scoreRoutes)
+app.use('/', authRoutes)
+app.use('/score', scoreRoutes)
 
 // Iniciar servidor
 app.listen(PORT, () => {

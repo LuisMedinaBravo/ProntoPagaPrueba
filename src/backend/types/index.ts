@@ -9,7 +9,7 @@ export interface User {
 export interface TokenPayload {
   sub: string
   role: 'admin' | 'user'
-  rut: string
+  rut?: string
 }
 
 export interface LoginRequest {

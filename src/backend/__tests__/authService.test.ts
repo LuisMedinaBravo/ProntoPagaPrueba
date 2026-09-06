@@ -30,6 +30,6 @@ describe('authService', () => {
 
     expect(payload.sub).toBe('1')
     expect(payload.role).toBe('admin')
-    expect(payload.rut).toBe('12.345.678-9')
+    expect(payload.rut).toBeUndefined()
   })
 })

@@ -37,7 +37,7 @@ export const authService = {
     const payload: TokenPayload = {
       sub: user.id,
       role: user.role,
-      rut: user.rut
+      ...(user.role === 'user' ? { rut: user.rut } : {})
     }
     
     return jwt.sign(payload, process.env.JWT_SECRET!, {
