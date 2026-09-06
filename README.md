@@ -1,75 +1,101 @@
-# React + TypeScript + Vite
+# ProntoPaga
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicacion web para autenticacion de usuarios y consulta de score financiero por rut.
 
-Currently, two official plugins are available:
+## Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React y TypeScript
+- Vite
+- Express
+- JSON Web Token (JWT)
+- Axios
+- Vitest y Testing Library
 
-## React Compiler
+## Requisitos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js
+- npm
 
-## Expanding the ESLint configuration
+## Instalacion
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Desde la raiz del proyecto, instalar las dependencias:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Configuracion del backend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Crea un archivo `.env` en la raiz del proyecto usando `.env.example` como referencia:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```dotenv
+PORT=3000
+JWT_SECRET=tu-jwt-secreto
+JWT_EXPIRES_IN=1h
 ```
+
+## Configuracion del frontend
+
+El frontend utiliza la variable `VITE_API_URL` para conectarse con el backend. Crea `src/frontend/.env` con:
+
+```dotenv
+VITE_API_URL=http://localhost:3000/api
+```
+
+## Ejecucion local
+
+El proyecto se ejecuta en `localhost` con dos servidores. Abre dos terminales desde la raiz del proyecto.
+
+### Backend
+
+El backend se ejecuta en el puerto `3000`:
+
+```bash
+npm run dev:backend
+```
+
+URL del backend: <http://localhost:3000>
+
+Endpoint de verificación del backend:
+
+```bash
+curl http://localhost:3000/health
+```
+
+### Frontend
+
+El frontend se ejecuta con Vite en el puerto `5173`:
+
+```bash
+npm run dev
+```
+
+URL de la aplicacion: <http://localhost:5173>
+
+## Usuarios de prueba
+
+### Administrador
+
+- Email: `admin@prontopaga.com`
+- Password: `admin12345`
+- RUT: `12.345.678-9`
+
+El administrador puede consultar cualquier rut.
+
+### Usuario
+
+- Email: `user@prontopaga.com`
+- Password: `user12345`
+- RUT: `9.999.999-9`
+
+El usuario puede consultar unicamente su propio rut.
+
+## Pruebas
+
+Ejecuta todas las pruebas de backend y frontend:
+
+```bash
+npm test
+```
+
+Las pruebas cubren autenticacion, generacion de JWT, calculo deterministico del score, rutas protegidas y formulario de login.
