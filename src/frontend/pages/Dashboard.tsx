@@ -11,6 +11,10 @@ const formatRut = (rut: string) => {
   return `${body.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dv}`
 }
 
+const formatTimestamp = (timestamp: string) => {
+  return new Date(timestamp).toISOString().replace(/\.\d{3}Z$/, 'Z')
+}
+
 const Dashboard = () => {
   const { user, logout } = useAuth()
   const [rut, setRut] = useState('')
@@ -96,15 +100,7 @@ const Dashboard = () => {
                 </div>
                 <div className="result-item">
                   <span className="label">Fecha</span>
-                  <span className="value">
-                    {new Date(fecha).toLocaleDateString('es-CL', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
+                  <span className="value">{formatTimestamp(fecha)}</span>
                 </div>
               </div>
             </div>

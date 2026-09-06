@@ -25,7 +25,7 @@ export const scoreService = {
     return {
       rut,
       score,
-      fecha: new Date().toISOString()
+      fecha: new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')
     }
   }
 }
