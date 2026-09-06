@@ -2,6 +2,10 @@ import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import type { TokenPayload } from '../types'
 
+const normalizeRut = (rut: string) => {
+  return rut.replace(/[^0-9kK]/g, '').toUpperCase()
+}
+
 export const authMiddleware = {
   // Verificar JWT
   authenticate: (req: Request, res: Response, next: NextFunction): void => {
@@ -39,7 +43,9 @@ export const authMiddleware = {
   // Verificar autorización para /score/:rut
   authorizeScore: (req: Request, res: Response, next: NextFunction): void => {
     const user = (req as any).user as TokenPayload
-    const requestedRut = req.params.rut
+    const requestedRut = Array.isArray(req.params.rut)
+      ? req.params.rut[0]
+      : req.params.rut
     
     // Admin puede consultar cualquier RUT
     if (user.role === 'admin') {
@@ -48,7 +54,7 @@ export const authMiddleware = {
     }
     
     // User solo puede consultar su propio RUT
-    if (user.rut === requestedRut) {
+    if (normalizeRut(user.rut) === normalizeRut(requestedRut)) {
       next()
       return
     }

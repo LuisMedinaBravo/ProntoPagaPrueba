@@ -36,7 +36,7 @@ describe('Login', () => {
   it('envia las credenciales y navega al dashboard', async () => {
     render(<Login />)
 
-    fireEvent.change(screen.getByPlaceholderText('ejemplo@dominio.com'), {
+    fireEvent.change(screen.getByPlaceholderText('tucorreo@ejemplo.com'), {
       target: { value: 'admin@prontopaga.com' },
     })
     fireEvent.change(screen.getByPlaceholderText('********'), {

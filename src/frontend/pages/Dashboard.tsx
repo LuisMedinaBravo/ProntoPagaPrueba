@@ -2,9 +2,19 @@ import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { scoreService } from '../services/api'
 
+const formatRut = (rut: string) => {
+  const clean = rut.replace(/[^0-9kK]/g, '').toUpperCase().slice(0, 9)
+  if (clean.length <= 1) return clean
+
+  const body = clean.slice(0, -1)
+  const dv = clean.slice(-1)
+  return `${body.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dv}`
+}
+
 const Dashboard = () => {
   const { user, logout } = useAuth()
   const [rut, setRut] = useState('')
+  const [searchedRut, setSearchedRut] = useState('')
   const [score, setScore] = useState<number | null>(null)
   const [fecha, setFecha] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -23,6 +33,7 @@ const Dashboard = () => {
       const data = await scoreService.getScore(cleanRut)
       setScore(data.score)
       setFecha(data.fecha)
+      setSearchedRut(formatRut(rut))
       setShowResult(true)
     } catch (err: any) {
       const message = err.response?.data?.message || 'Error al consultar el score'
@@ -30,14 +41,6 @@ const Dashboard = () => {
     } finally {
       setLoading(false)
     }
-  }
-
-  const formatRut = (rut: string) => {
-    const clean = rut.replace(/[.-]/g, '')
-    if (clean.length <= 1) return clean
-    const body = clean.slice(0, -1)
-    const dv = clean.slice(-1)
-    return `${body.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dv}`
   }
 
   return (
@@ -64,7 +67,8 @@ const Dashboard = () => {
               <input
                 type="text"
                 value={rut}
-                onChange={(e) => setRut(e.target.value)}
+                onChange={(e) => setRut(formatRut(e.target.value))}
+                maxLength={12}
                 placeholder="Ingresa el RUT (ej: 12345678-9)"
                 required
               />
@@ -82,7 +86,7 @@ const Dashboard = () => {
               <div className="result-content">
                 <div className="result-item">
                   <span className="label">RUT</span>
-                  <span className="value">{formatRut(rut)}</span>
+                  <span className="value">{searchedRut}</span>
                 </div>
                 <div className="result-item score-item">
                   <span className="label">Score</span>
